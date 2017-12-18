@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {StyleRoot} from 'radium';
-import {Treebeard, decorators} from '../src/index';
+import {Treebeard, DragDropTreeBeard, decorators} from '../src/index';
 
 import data from './data';
 import styles from './styles';
@@ -78,6 +78,11 @@ class DemoTree extends React.Component {
         this.setState({data: filtered});
     }
 
+    updateData = source => target => {
+        console.log('pls update drag drop ', source, target);
+        this.setState({source});
+    }
+
     render() {
         const {data: stateData, cursor} = this.state;
 
@@ -95,9 +100,10 @@ class DemoTree extends React.Component {
                     </div>
                 </div>
                 <div style={styles.component}>
-                    <Treebeard data={stateData}
+                    <DragDropTreeBeard data={stateData}
                                decorators={decorators}
-                               onToggle={this.onToggle}/>
+                               onToggle={this.onToggle}
+                               updateData={data => this.updateData(data)}/>
                 </div>
                 <div style={styles.component}>
                     <NodeViewer node={cursor}/>

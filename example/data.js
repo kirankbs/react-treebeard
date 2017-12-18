@@ -7,17 +7,19 @@ export default {
         {
             name: 'example',
             children: [
-                { name: 'app.js' },
-                { name: 'data.js' },
-                { name: 'index.html' },
-                { name: 'styles.js' },
-                { name: 'webpack.config.js' }
-            ]
+                { name: 'app.js', type: '01' },
+                { name: 'data.js', type: '01' },
+                { name: 'index.html', type: '01' },
+                { name: 'styles.js', type: '01' },
+                { name: 'webpack.config.js', type: '01' }
+            ],
+            type: '0'
         },
         {
             name: 'node_modules',
             loading: true,
-            children: []
+            children: [],
+            type: '0'
         },
         {
             name: 'src',
@@ -25,22 +27,24 @@ export default {
                 {
                     name: 'components',
                     children: [
-                        { name: 'decorators.js' },
-                        { name: 'treebeard.js' }
-                    ]
+                        { name: 'decorators.js', type: '00201' },
+                        { name: 'treebeard.js', type: '00201' }
+                    ], type: '02'
                 },
-                { name: 'index.js' }
-            ]
+                { name: 'index.js', type: '02' }
+            ],
+            type: '0'
         },
         {
             name: 'themes',
             children: [
-                { name: 'animations.js' },
-                { name: 'default.js' }
-            ]
+                { name: 'animations.js', type: '03' },
+                { name: 'default.js', type: '03' }
+            ],
+            type: '0'
         },
-        { name: 'Gulpfile.js' },
-        { name: 'index.js' },
-        { name: 'package.json' }
+        { name: 'Gulpfile.js', type: '0'},
+        { name: 'index.js', type: '0' },
+        { name: 'package.json', type: '0' }
     ]
 };
