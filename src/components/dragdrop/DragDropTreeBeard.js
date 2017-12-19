@@ -8,8 +8,9 @@ import defaultAnimations from '../../themes/animations';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import DragDropTreeNode from './DragDropTreeNode';
-import dragDropNodeChildren from './dragDropNodeChildren';
 
+
+@DragDropContext(HTML5Backend)
 class DragDropTreeBeard extends React.Component {
 
     render() {
@@ -74,4 +75,4 @@ DragDropTreeBeard.defaultProps = {
     decorators: defaultDecorators
 };
 
-export default DragDropContext(HTML5Backend)(DragDropTreeBeard);
+export default DragDropTreeBeard;
