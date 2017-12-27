@@ -10,40 +10,37 @@ import dragDropNodeChildren from './dragDropNodeChildren';
 import defaultStyle from '../../themes/default';
 
 
-const treeNodeSource = {
-    beginDrag(props, monitor, component) {
+export const treeNodeSource = {
+    beginDrag(props) {
         return props.node;
     },
-    endDrag(props, monitor, component) {
+    endDrag(props, monitor) {
         if (props.reorderTreeNodes) {
             props.reorderTreeNodes(monitor.getItem(), monitor.getDropResult());
         }
     }
 };
-const TreeNodeTarget = {
+export const TreeNodeTarget = {
     drop(props, monitor) {
         if (!monitor.didDrop()) {
             return props.node;
         }
     }
 };
-const sourceCollect = (connect, monitor) => ({
+export const sourceCollect = (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
 });
-const targetCollect = (connect, monitor) => ({
+export const targetCollect = (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop()
 });
-const validateDragDropType = (props) => {
-    return props.node.name !== 'root' ? props.node.dragDropType : 'root';
-};
+export const validateDragDropType = props => props.node.name !== 'root' ? props.node.dragDropType || 'root' : 'root';
 
-@DropTarget(validateDragDropType, TreeNodeTarget, targetCollect)
 @DragSource(validateDragDropType, treeNodeSource, sourceCollect)
+@DropTarget(validateDragDropType, TreeNodeTarget, targetCollect)
 class DragDropTreeNode extends React.Component {
-
     onClick = () => {
         const {node, onToggle} = this.props;
         const {toggled} = node;
@@ -92,7 +89,7 @@ class DragDropTreeNode extends React.Component {
         return connectDragSource(connectDropTarget(
             <li ref={ref => this.topLevelRef = ref}
                 style={this.getStyle().styleWithDragDrop}>
-                {isOver && <div style={this.getStyle().placeHolderStyle} /> }
+                {isOver && <div className={'placeholder'} style={this.getStyle().placeHolderStyle}/>}
                 {this.renderHeader(decorators, animations)}
 
                 {this.renderDrawer(decorators, animations)}
@@ -187,7 +184,11 @@ DragDropTreeNode.propTypes = {
         PropTypes.object,
         PropTypes.bool
     ]).isRequired,
-    onToggle: PropTypes.func
+    onToggle: PropTypes.func,
+    connectDragSource: PropTypes.func.isRequired,
+    connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.object.isRequired,
+    isDragging: PropTypes.object.isRequired
 };
 
 export default DragDropTreeNode;
