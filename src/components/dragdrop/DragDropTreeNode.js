@@ -72,26 +72,24 @@ class DragDropTreeNode extends React.Component {
         return Object.assign({}, decorators, nodeDecorators);
     }
     getStyle = () => {
-        const {style, isDragging} = this.props;
+        const {style, isDragging, isOver} = this.props;
         return {
             styleWithDragDrop: Object.assign({}, style.base, {
                 display: isDragging ? 'none' : 'block',
                 cursor: 'pointer'
-            }),
+            }, isOver ? {border: '1px dashed gray'} : {}),
             placeHolderStyle: style.placeHolderStyle || defaultStyle.tree.node.placeHolderStyle
         };
     }
 
     render() {
-        const {connectDragSource, connectDropTarget, isOver} = this.props;
+        const {connectDragSource, connectDropTarget} = this.props;
         const decorators = this.decorators();
         const animations = this.animations();
         return connectDragSource(connectDropTarget(
             <li ref={ref => this.topLevelRef = ref}
                 style={this.getStyle().styleWithDragDrop}>
-                {isOver && <div className={'placeholder'} style={this.getStyle().placeHolderStyle}/>}
                 {this.renderHeader(decorators, animations)}
-
                 {this.renderDrawer(decorators, animations)}
             </li>
         ));
@@ -184,11 +182,7 @@ DragDropTreeNode.propTypes = {
         PropTypes.object,
         PropTypes.bool
     ]).isRequired,
-    onToggle: PropTypes.func,
-    connectDragSource: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.object.isRequired,
-    isDragging: PropTypes.object.isRequired
+    onToggle: PropTypes.func
 };
 
 export default DragDropTreeNode;

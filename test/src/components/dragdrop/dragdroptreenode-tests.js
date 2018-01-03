@@ -1,9 +1,12 @@
 /*  eslint no-unused-expressions:0  */
 
 'use strict';
-import React, { Component } from 'react';
+import React from 'react';
 import DragDropTreeNode, {
-    sourceCollect, targetCollect, treeNodeSource, TreeNodeTarget,
+    sourceCollect,
+    targetCollect,
+    treeNodeSource,
+    TreeNodeTarget,
     validateDragDropType
 } from '../../../../src/components/dragdrop/DragDropTreeNode';
 import TestUtils from 'react-dom/test-utils';
@@ -11,19 +14,9 @@ import {animations, decorators} from '../../../../src/index';
 import defaultStyle from '../../../../src/themes/default';
 import sinon from 'sinon';
 import {expect} from 'chai';
-import { DragDropContext } from 'react-dnd';
-import TestBackend from 'react-dnd-test-backend';
+import {wrapDragDropComponentInTestContext} from '../../utils/factory';
 
-function wrapInTestContext(DecoratedComponent) {
-    @DragDropContext(TestBackend)
-    class TestContextContainer extends Component {
-        render() {
-            return <DecoratedComponent {...this.props} />;
-        }
-    }
 
-    return TestContextContainer;
-}
 const data = {
     name: 'react-treebeard',
     toggled: true,
@@ -31,11 +24,11 @@ const data = {
         {
             name: 'example',
             children: [
-                { name: 'app.js', type: '01' },
-                { name: 'data.js', type: '01' },
-                { name: 'index.html', type: '01' },
-                { name: 'styles.js', type: '01' },
-                { name: 'webpack.config.js', type: '01' }
+                {name: 'app.js', type: '01'},
+                {name: 'data.js', type: '01'},
+                {name: 'index.html', type: '01'},
+                {name: 'styles.js', type: '01'},
+                {name: 'webpack.config.js', type: '01'}
             ],
             type: '0'
         },
@@ -51,25 +44,25 @@ const data = {
                 {
                     name: 'components',
                     children: [
-                        { name: 'decorators.js', type: '00201' },
-                        { name: 'treebeard.js', type: '00201' }
+                        {name: 'decorators.js', type: '00201'},
+                        {name: 'treebeard.js', type: '00201'}
                     ], type: '02'
                 },
-                { name: 'index.js', type: '02' }
+                {name: 'index.js', type: '02'}
             ],
             type: '0'
         },
         {
             name: 'themes',
             children: [
-                { name: 'animations.js', type: '03' },
-                { name: 'default.js', type: '03' }
+                {name: 'animations.js', type: '03'},
+                {name: 'default.js', type: '03'}
             ],
             type: '0'
         },
-        { name: 'Gulpfile.js', type: '0'},
-        { name: 'index.js', type: '0' },
-        { name: 'package.json', type: '0' }
+        {name: 'Gulpfile.js', type: '0'},
+        {name: 'index.js', type: '0'},
+        {name: 'package.json', type: '0'}
     ]
 };
 
@@ -90,7 +83,7 @@ describe('dragdroptreenode', () => {
                 style={defaultStyle.tree.node}
                 isOver={false}
                 isDragging={false}/>);
-        const DragDropTreeNodeContext = wrapInTestContext(DragDropTreeNode);
+        const DragDropTreeNodeContext = wrapDragDropComponentInTestContext(DragDropTreeNode);
         componentWithContext = TestUtils.renderIntoDocument(
             <DragDropTreeNodeContext
                 node={{}}
@@ -99,10 +92,12 @@ describe('dragdroptreenode', () => {
                 connectDragSource={identity}
                 connectDropTarget={identity}
                 style={defaultStyle.tree.node}
-                reorderTreeNodes={reorderTreeNodes}/>
+                reorderTreeNodes={reorderTreeNodes}
+                isDragging={() => true}
+                isOver={() => true}/>
         );
     });
-    it('should display default placeholder in tree while dragging', () => {
+    it('should display default placeholder on tree node while dragging', () => {
         const OriginalTreeNode = DragDropTreeNode.DecoratedComponent;
         const identity = el => el;
 
@@ -117,13 +112,8 @@ describe('dragdroptreenode', () => {
                 isDragging={true}
                 isOver={true}/>
         );
-        const placeholder = TestUtils.findRenderedDOMComponentWithClass(root, 'placeholder');
-        placeholder.style.border.should.equal('1px dashed gray');
-        placeholder.style.padding.should.equal('0.5rem 1rem');
-        placeholder.style.marginBottom.should.equal('0.5rem');
-        placeholder.style.backgroundColor.should.equal('white');
-        placeholder.style.cursor.should.equal('move');
-        placeholder.style.height.should.equal('35px');
+        const liPlaceholder = TestUtils.findRenderedDOMComponentWithTag(root, 'li');
+        liPlaceholder.style.border.should.equal('1px dashed gray');
     });
     it('should display component in tree beard while not dragging', () => {
         const li = TestUtils.findRenderedDOMComponentWithTag(componentWithContext, 'li');

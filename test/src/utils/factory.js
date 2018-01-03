@@ -1,6 +1,8 @@
 'use strict';
 
-import React from 'react';
+import React, {Component} from 'react';
+import { DragDropContext } from 'react-dnd';
+import TestBackend from 'react-dnd-test-backend';
 
 export const createDecorators = (spec) => {
     spec = spec || {};
@@ -43,3 +45,14 @@ export const createAnimations = () => {
         }
     };
 };
+
+export const wrapDragDropComponentInTestContext = (DecoratedComponent) => {
+    @DragDropContext(TestBackend)
+    class TestContextContainer extends Component {
+        render() {
+            return <DecoratedComponent {...this.props} />;
+        }
+    }
+
+    return TestContextContainer;
+}

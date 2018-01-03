@@ -14,7 +14,7 @@ import DragDropTreeNode from './DragDropTreeNode';
 class DragDropTreeBeard extends React.Component {
 
     render() {
-        const {animations, decorators, data: propsData, onToggle, style, isOver, reorderTreeNodes} = this.props;
+        const {animations, decorators, data: propsData, onToggle, style, reorderTreeNodes} = this.props;
         let data = propsData;
         const styleWithDragDrop = Object.assign({}, style.tree.base, {
             position: 'relative',
@@ -38,18 +38,6 @@ class DragDropTreeBeard extends React.Component {
                                       style={style.tree.node}
                                       reorderTreeNodes={reorderTreeNodes}/>
                 )}
-                {isOver &&
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    height: '100%',
-                    width: '100%',
-                    zIndex: 1,
-                    opacity: 0.5,
-                    backgroundColor: 'yellow'
-                }}/>
-                }
             </ul>
         );
     }
